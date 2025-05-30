@@ -54,7 +54,7 @@ async def transcribe_audio(files: List[UploadFile] = File(...)):
                     y=audio_data, orig_sr=sampling_rate, target_sr=16000
                 )
 
-            result = transcription_pipeline(inputs=content, return_timestamps="word")
+            result = transcription_pipeline(inputs=audio_data, return_timestamps="word")
 
             transcription = result["text"]
             chunks = result["chunks"]
@@ -65,6 +65,7 @@ async def transcribe_audio(files: List[UploadFile] = File(...)):
                     transcription=transcription, duration=str(duration)
                 )
             )
+            await file.close()
 
         except Exception as e:
             print(f"Error processing file {file.filename}: {str(e)}")
