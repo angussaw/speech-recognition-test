@@ -24,3 +24,21 @@
    ```
    pre-commit install
    ```
+
+4. Install ffmpeg
+
+## B. Running Automatic Speech Recognition Microservice Locally
+
+1. Build and run the image
+
+```
+docker build -t asr-api -f asr/Dockerfile .
+
+docker run --rm -p 8001:8001 --name asr-api asr-api
+```
+
+2. Test the endpoint using CURL
+
+```
+curl -F ‘files=@/path/to/audio-file/sample-000000.mp3’ http://localhost:8001/asr
+```
