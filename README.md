@@ -1,16 +1,10 @@
-# <Project Name>
+# Speech Recognition Test
 
 ## A. Developer Setup
 
 ### Installation
 
-1. Install UV:
-
-   ```
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
-
-2. Create and activate a virtual environment:
+1. Create and activate a virtual environment:
 
    ```
    python -m venv .venv
@@ -19,13 +13,13 @@
    .venv\Scripts\activate  # On Windows
    ```
 
-3. Install dependencies using UV:
+2. Install dependencies using pip:
 
    ```
-   uv sync
+   pip install -r requirements.txt
    ```
 
-4. Install pre-commit hooks:
+3. Install pre-commit hooks:
 
    ```
    pre-commit install
