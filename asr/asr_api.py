@@ -42,22 +42,27 @@ async def transcribe_audio(files: List[UploadFile] = File(...)):
             - duration_seconds (str): Duration of the audio in seconds
 
     """
+    inputs = []
     results = []
 
     for file in files:
-        try:
-            content = await file.read()
+        content = await file.read()
 
-            audio_data, sampling_rate = librosa.load(io.BytesIO(content), sr=None)
-            if sampling_rate != 16000:
-                audio_data = librosa.resample(
-                    y=audio_data, orig_sr=sampling_rate, target_sr=16000
-                )
+        audio_data, sampling_rate = librosa.load(io.BytesIO(content), sr=None)
+        if sampling_rate != 16000:
+            audio_data = librosa.resample(
+                y=audio_data, orig_sr=sampling_rate, target_sr=16000
+            )
 
-            result = transcription_pipeline(inputs=audio_data, return_timestamps="word")
+        inputs.append(audio_data)
+        await file.close()
 
-            transcription = result["text"]
-            chunks = result["chunks"]
+    try:
+        outputs = transcription_pipeline(inputs=inputs, return_timestamps="word")
+
+        for output in outputs:
+            transcription = output["text"]
+            chunks = output["chunks"]
             duration = chunks[-1]["timestamp"][1]
 
             results.append(
@@ -65,10 +70,8 @@ async def transcribe_audio(files: List[UploadFile] = File(...)):
                     transcription=transcription, duration=str(duration)
                 )
             )
-            await file.close()
 
-        except Exception as e:
-            print(f"Error processing file {file.filename}: {str(e)}")
-            continue
+    except Exception as e:
+        print(f"Error processing files: {str(e)}")
 
     return results
