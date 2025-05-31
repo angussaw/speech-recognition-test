@@ -42,3 +42,17 @@ docker run --rm -p 8001:8001 --name asr-api asr-api
 ```
 curl -F ‘files=@/path/to/audio-file/sample-000000.mp3’ http://localhost:8001/asr
 ```
+
+3. Place all audio files in a folder named `cv-valid-dev`
+
+4. Create an `.env` file and update a suitable `BATCH_SIZE` value. (defaults to 20)
+
+```
+cp .env.example .env
+```
+
+5. Run `asr/cv-decode.py` at the root level, specifying the path of the audio files (`cv-valid-dev`) and the csv files to save the generated texts to
+
+```
+python asr/cv-decode.py cv-valid-dev <save_csv_file_name>
+```

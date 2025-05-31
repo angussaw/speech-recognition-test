@@ -1,4 +1,5 @@
 import io
+import logging
 from typing import List
 
 import librosa
@@ -16,6 +17,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger("asr-microservice")
 
 transcription_pipeline = pipeline(
     "automatic-speech-recognition", model="facebook/wav2vec2-large-960h"
@@ -63,7 +69,13 @@ async def transcribe_audio(files: List[UploadFile] = File(...)):
         for output in outputs:
             transcription = output["text"]
             chunks = output["chunks"]
-            duration = chunks[-1]["timestamp"][1]
+            duration = 0
+            if (
+                chunks
+                and "timestamp" in chunks[-1]
+                and len(chunks[-1]["timestamp"]) > 1
+            ):
+                duration = chunks[-1]["timestamp"][1]
 
             results.append(
                 TranscriptionResponse(
@@ -71,7 +83,10 @@ async def transcribe_audio(files: List[UploadFile] = File(...)):
                 )
             )
 
-    except Exception as e:
-        print(f"Error processing files: {str(e)}")
+        logger.info(f"Successfully transcribed {len(files)} audio files")
 
-    return results
+        return results
+
+    except Exception as e:
+        logger.error(f"Error processing files: {str(e)}")
+        return [TranscriptionResponse(transcription="", duration="") for _ in files]

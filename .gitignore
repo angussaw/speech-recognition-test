@@ -175,3 +175,5 @@ cython_debug/
 
 # MacOS
 .DS_Store
+
+*.mp3
