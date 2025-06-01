@@ -17,7 +17,7 @@ if [ -z "$ELASTIC_PASSWORD" ]; then
     exit 1;
 fi
 
-curl -k -X PUT "https://localhost:9200/$INDEX_NAME" \
+curl -X PUT "http://localhost:9200/$INDEX_NAME" \
      -u "elastic:$ELASTIC_PASSWORD" \
      -H "Content-Type: application/json" \
      -d '{

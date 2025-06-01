@@ -42,7 +42,7 @@ services:
         find . -type d -exec chmod 750 \{\} \;;
         find . -type f -exec chmod 640 \{\} \;;
         echo "Waiting for Elasticsearch availability";
-        until curl -s --cacert config/certs/ca/ca.crt https://es01:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
+        until curl -s http://es01:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
         echo "All done!";
       '
     healthcheck:
@@ -69,10 +69,7 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - bootstrap.memory_lock=true
       - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=certs/es01/es01.key
-      - xpack.security.http.ssl.certificate=certs/es01/es01.crt
-      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
+      - xpack.security.http.ssl.enabled=false
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.key=certs/es01/es01.key
       - xpack.security.transport.ssl.certificate=certs/es01/es01.crt
@@ -80,6 +77,11 @@ services:
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.license.self_generated.type=basic
       - xpack.ml.use_auto_machine_memory_percent=true
+      - http.cors.enabled=true
+      - http.cors.allow-origin=http://localhost:3000,*
+      - http.cors.allow-methods=OPTIONS,HEAD,GET,POST,PUT,DELETE
+      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization,x-elastic-client-meta
+      - http.cors.allow-credentials=true
     mem_limit: 1073741824
     ulimits:
       memlock:
@@ -110,10 +112,6 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - bootstrap.memory_lock=true
       - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=certs/es02/es02.key
-      - xpack.security.http.ssl.certificate=certs/es02/es02.crt
-      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.key=certs/es02/es02.key
       - xpack.security.transport.ssl.certificate=certs/es02/es02.crt
@@ -121,6 +119,11 @@ services:
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.license.self_generated.type=basic
       - xpack.ml.use_auto_machine_memory_percent=true
+      - http.cors.enabled=true
+      - http.cors.allow-origin=http://localhost:3000,*
+      - http.cors.allow-methods=OPTIONS,HEAD,GET,POST,PUT,DELETE
+      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization,x-elastic-client-meta
+      - http.cors.allow-credentials=true
     mem_limit: 1073741824
     ulimits:
       memlock:

@@ -10,7 +10,7 @@ from elasticsearch.helpers import bulk
 load_dotenv()
 
 es = Elasticsearch(
-    ["https://localhost:9200"],
+    ["http://localhost:9200"],
     basic_auth=("elastic", os.getenv("ELASTIC_PASSWORD")),
     verify_certs=False,
 )

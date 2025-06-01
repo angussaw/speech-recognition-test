@@ -94,16 +94,18 @@ bash elastic-backend/create-index.sh
 #### 4. Verify that the index has been created succcesfully:
 
 ```
-curl -k -X GET "https://localhost:9200/_cat/indices" -u "elastic:$ELASTIC_PASSWORD"
+curl -X GET "http://localhost:9200/_cat/indices" -u "elastic:$ELASTIC_PASSWORD"
 ```
 
-```
-green open cv-transcriptions _VMzGXqYRdCtbXqEo88taA 2 1 4076 0 1.8mb 973kb 973kb
+````
+green open cv-transcriptions 7j7yI0oMSC2aSaRsmgQq5w 2 1 0 0 908b 454b 454b
 ```
 
-```
-curl -k -X GET "https://localhost:9200/cv-transcriptions/_count?pretty" -u "elastic:$ELASTIC_PASSWORD"
-```
+````
+
+curl -X GET "http://localhost:9200/cv-transcriptions/\_count?pretty" -u "elastic:$ELASTIC_PASSWORD"
+
+````
 
 ```json
 {
@@ -115,7 +117,7 @@ curl -k -X GET "https://localhost:9200/cv-transcriptions/_count?pretty" -u "elas
     "failed": 0
   }
 }
-```
+````
 
 #### 5. After the index is created, run `elastic-backend/cv-index.py` at the root level, specifying the path of the csv file containing the generated texts
 
@@ -126,7 +128,7 @@ python elastic-backend/cv-index.py <records_path>
 #### 6. Verify that the records have been succesfully indexed
 
 ```
-curl -k -X GET "https://localhost:9200/cv-transcriptions/_search?size=2&pretty" -u "elastic:$ELASTIC_PASSWORD"
+curl -X GET "http://localhost:9200/cv-transcriptions/_search?size=2&pretty" -u "elastic:$ELASTIC_PASSWORD"
 ```
 
 ```json
