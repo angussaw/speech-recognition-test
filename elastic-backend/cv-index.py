@@ -16,7 +16,7 @@ es = Elasticsearch(
 )
 
 
-def index_records(records_path: str):
+def index_records(records_path: str, index_name: str):
     """Index records from a CSV file into Elasticsearch.
 
     This function reads records from a CSV file, performs data cleaning,
@@ -24,12 +24,23 @@ def index_records(records_path: str):
 
     Args:
         records_path (str): Path to the CSV file containing records to be indexed.
+        index_name (str): The name of the index in the elastic search cluster.
     """
 
-    index_name = os.getenv("INDEX_NAME", "cv-transcriptions")
+    # Verify index exists and get mappings
+    if not es.indices.exists(index=index_name):
+        raise ValueError(f"Index '{index_name}' does not exist")
+
+    mappings = es.indices.get_mapping(index=index_name)[index_name]["mappings"]
+    records_df = pd.read_csv(records_path)
+
+    missing_fields = set(mappings["properties"].keys()) - set(records_df.columns)
+    if missing_fields:
+        raise ValueError(
+            f"Records dataframe is missing required fields defined in index mapping: {missing_fields}"
+        )
 
     # Cleaning of records data before indexing
-    records_df = pd.read_csv(records_path)
     for column in records_df.columns:
         records_df[column] = records_df[column].apply(
             lambda x: None if isinstance(x, float) and np.isnan(x) else x
@@ -56,4 +67,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python elastic-backend/cv-index.py <records_path>")
         sys.exit(1)
-    index_records(sys.argv[1])
+    index_records(
+        records_path=sys.argv[1],
+        index_name=os.getenv("INDEX_NAME", "cv-transcriptions"),
+    )
