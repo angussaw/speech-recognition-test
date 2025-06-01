@@ -184,3 +184,15 @@ curl -X GET "http://localhost:9200/cv-transcriptions/_search?size=2&pretty" -u "
   }
 }
 ```
+
+## C. Setting up the Search UI frontend locally
+
+#### 1. Start the service
+
+```
+docker-compose -f search-ui/docker-compose.yml --env-file .env up
+```
+
+#### 2. Once the service is up, open `localhost:3000` on your browser and test the filters/fuzzy search to verify that the Search UI service is working as intended for the relevant fields
+
+![Search UI Screenshot](./assets/search-ui-screenshot.png)
