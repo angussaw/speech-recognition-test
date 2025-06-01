@@ -16,13 +16,6 @@ import {
 import { Layout } from "@elastic/react-search-ui-views";
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
 
-console.log("Environment Variables:");
-console.log("REACT_APP_INDEX_NAME:", process.env.REACT_APP_INDEX_NAME);
-console.log(
-  "REACT_APP_ELASTIC_PASSWORD:",
-  process.env.REACT_APP_ELASTIC_PASSWORD ? "Set (not showing value)" : "Not set"
-);
-
 const connector = new ElasticsearchAPIConnector({
   host: "http://localhost:9200",
   index: process.env.REACT_APP_INDEX_NAME || "cv-transcriptions",
