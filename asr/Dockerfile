@@ -13,6 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY asr/asr_api.py .
 COPY asr/models.py .
+COPY .env .
 
 EXPOSE 8001
 

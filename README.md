@@ -27,7 +27,17 @@ pre-commit install
 
 ## B. Running Automatic Speech Recognition microservice locally
 
-#### 1. Build and run the image
+#### 1. Create an `.env` file and input the name of the HuggingFace model to use for audio transcription
+
+```
+cp .env.example .env
+```
+
+```
+HF_MODEL_NAME=
+```
+
+#### 2. Build and run the image
 
 ```
 docker build -t asr-api -f asr/Dockerfile .
@@ -35,10 +45,10 @@ docker build -t asr-api -f asr/Dockerfile .
 docker run --rm -p 8001:8001 --name asr-api asr-api
 ```
 
-#### 2. Test the endpoint using CURL
+#### 3. Test the endpoint using CURL
 
 ```
-curl -F ‘files=@/path/to/audio-file/MKH800_19_0001.wav’ http://localhost:8001/asr
+curl -F "files=@/path/to/audio-file/MKH800_19_0001.wav" http://localhost:8001/asr
 ```
 
 ```json
@@ -50,19 +60,15 @@ curl -F ‘files=@/path/to/audio-file/MKH800_19_0001.wav’ http://localhost:800
 ]
 ```
 
-#### 3. Place all audio files in a folder named `cv-valid-dev`
+#### 4. Place all audio files in a folder named `cv-valid-dev`
 
-#### 4. Create an `.env` file and update a suitable `BATCH_SIZE` value. (defaults to 20)
-
-```
-cp .env.example .env
-```
+#### 5. In the `.env` file, update a suitable `BATCH_SIZE` value (defaults to 20)
 
 ```
 BATCH_SIZE=
 ```
 
-#### 5. Run `asr/cv-decode.py` at the root level, specifying the path of the audio files (`cv-valid-dev`) and the csv file to save the generated texts to
+#### 6. Run `asr/cv-decode.py` at the root level, specifying the path of the audio files (`cv-valid-dev`) and the csv file to save the generated texts to
 
 ```
 python asr/cv-decode.py cv-valid-dev <save_csv_file_name>
@@ -185,7 +191,7 @@ curl -X GET "http://localhost:9200/cv-transcriptions/_search?size=2&pretty" -u "
 }
 ```
 
-## C. Setting up the Search UI frontend locally
+## D. Setting up the Search UI frontend locally
 
 #### 1. Start the service
 

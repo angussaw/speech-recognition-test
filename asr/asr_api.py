@@ -1,12 +1,16 @@
 import io
 import logging
+import os
 from typing import List
 
 import librosa
+from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from models import TranscriptionResponse
 from transformers import pipeline
+
+load_dotenv()
 
 app = FastAPI(title="asr", version="fastapi:1.0")
 
@@ -24,7 +28,7 @@ logging.basicConfig(
 logger = logging.getLogger("asr-microservice")
 
 transcription_pipeline = pipeline(
-    "automatic-speech-recognition", model="facebook/wav2vec2-large-960h"
+    "automatic-speech-recognition", model=os.getenv("HF_MODEL_NAME")
 )
 
 
