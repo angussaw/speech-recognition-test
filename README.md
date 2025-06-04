@@ -1,5 +1,17 @@
 # Speech Recognition Test
 
+# Speech Recognition Test
+
+## Overview
+
+This repository contains a speech recognition system with three main components:
+
+1. An Automatic Speech Recognition (ASR) microservice that transcribes audio files
+2. An Elasticsearch backend for storing and querying generated transcriptions
+3. A Search UI frontend that allows searching through transcribed audio
+
+The following instructions provide the steps required to run the components and services locally. The final solution is deployed on the public cloud (AWS) for review.
+
 ## A. Developer Setup and Installation
 
 #### 1. Create and activate a virtual environment:
@@ -24,6 +36,16 @@ pre-commit install
 ```
 
 #### 4. Install ffmpeg
+
+```
+brew install ffmpeg # On macOS
+# or
+sudo apt update # On Linux
+sudo apt install ffmpeg
+# or
+choco install ffmpeg # On Windows
+
+```
 
 ## B. Running Automatic Speech Recognition microservice locally
 
@@ -101,17 +123,15 @@ bash elastic-backend/create-index.sh
 
 ```
 curl -X GET "http://localhost:9200/_cat/indices" -u "elastic:$ELASTIC_PASSWORD"
+
+# green open cv-transcriptions 7j7yI0oMSC2aSaRsmgQq5w 2 1 0 0 908b 454b 454b
+
 ```
 
-````
-green open cv-transcriptions 7j7yI0oMSC2aSaRsmgQq5w 2 1 0 0 908b 454b 454b
 ```
-
-````
-
 curl -X GET "http://localhost:9200/cv-transcriptions/\_count?pretty" -u "elastic:$ELASTIC_PASSWORD"
 
-````
+```
 
 ```json
 {
@@ -123,7 +143,7 @@ curl -X GET "http://localhost:9200/cv-transcriptions/\_count?pretty" -u "elastic
     "failed": 0
   }
 }
-````
+```
 
 #### 5. After the index is created, run `elastic-backend/cv-index.py` at the root level, specifying the path of the csv file containing the generated texts
 
@@ -202,3 +222,24 @@ docker-compose -f search-ui/docker-compose.yml --env-file .env up
 #### 2. Once the service is up, open `localhost:3000` on your browser and test the filters/fuzzy search to verify that the Search UI service is working as intended for the relevant fields
 
 ![Search UI Screenshot](./assets/search-ui-screenshot.png)
+
+## E. Cloud Deployment
+
+The solution is deployed to the public cloud on AWS. It comprises of the backend elastic search and frontend search UI service, allowing users to search audio files based on the generated texts, duration, age, gender and accent.
+
+To access it, please refer to the deployment URL as attached in the submission email.
+
+## F. Potential improvements:
+
+#### ASR microservice:
+
+- An orchestrator to trigger scheduled batch transcriptions
+- S3 integration for audio files and generated texts
+- Dynamic batching of audio files based on length
+- Queue-based architecture with retry mechanisms and dead letter queues for failed processing
+- Container-based deployment with GPU support and autoscaling via ECS
+
+#### Elastic search backend and frontend deployment:
+
+- A proxy server can be set up so that requests are forwarded to the backend, instead of directly from browser to the backend
+- The backend and frontend instances are currently public facing. To address this, the backend and frontend instances can be in a private subnet, with EC2 instance connect enabling admin access.
