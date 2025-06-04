@@ -1,7 +1,5 @@
 # Speech Recognition Test
 
-# Speech Recognition Test
-
 ## Overview
 
 This repository contains a speech recognition system with three main components:

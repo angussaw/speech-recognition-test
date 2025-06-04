@@ -176,6 +176,9 @@ cython_debug/
 # MacOS
 .DS_Store
 
+*.ipynb
+*.zip
+
 *.mp3
 *.pem
 
