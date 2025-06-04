@@ -183,3 +183,8 @@ cython_debug/
 *.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
+
+
+*.drawio
+*.docx
+*.doc
