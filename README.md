@@ -232,7 +232,7 @@ docker-compose -f search-ui/docker-compose.yml --env-file .env up
 
 The solution is deployed to the public cloud on AWS. It comprises of the backend elastic search and frontend search UI service, allowing users to search audio files based on the generated texts, duration, age, gender and accent.
 
-To access it, please refer to the deployment URL as attached in the submission email.
+Please refer to the following deployment URL to access the search UI service: https://asr-test.com
 
 ## F. Potential improvements:
 
