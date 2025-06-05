@@ -36,6 +36,12 @@ const config = {
     fuzziness: true,
     result_fields: {
       filename: { raw: {} },
+      text: {
+        snippet: {
+          size: 200,
+          fallback: true,
+        },
+      },
       generated_text: {
         snippet: {
           size: 200,
