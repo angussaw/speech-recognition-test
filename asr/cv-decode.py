@@ -1,5 +1,5 @@
+import argparse
 import os
-import sys
 import time
 from typing import List
 
@@ -69,7 +69,7 @@ def decode_audio_files(path: str, save_csv_file_name: str) -> None:
     batch_size = int(os.getenv("BATCH_SIZE", 20))
 
     existing_df = pd.read_csv(save_csv_file_name)
-    if "filename" not in existing_df.columns():
+    if "filename" not in existing_df.columns:
         print("Column 'filename' is not present in target csv file")
 
     else:
@@ -126,10 +126,18 @@ def decode_audio_files(path: str, save_csv_file_name: str) -> None:
 
 if __name__ == "__main__":
     start_time = time.time()
-    if len(sys.argv) != 3:
-        print("Usage: python asr/cv-decode.py <path_name> <save_csv_file_name>")
-        sys.exit(1)
-    decode_audio_files(sys.argv[1], sys.argv[2])
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "path", type=str, help="Path to directory containing audio files to transcribe"
+    )
+    parser.add_argument(
+        "save_csv_file_name",
+        type=str,
+        help="Path to CSV file to save transcription results",
+    )
+    args = parser.parse_args()
+    decode_audio_files(path=args.path, save_csv_file_name=args.save_csv_file_name)
     end_time = time.time()
     elapsed_time = end_time - start_time
     print(f"\nTotal time elapsed: {elapsed_time:.2f} seconds")

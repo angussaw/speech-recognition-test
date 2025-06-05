@@ -12,6 +12,13 @@ The following instructions provide the steps required to run the components and 
 
 ## A. Developer Setup and Installation
 
+#### Prerequisites for local development:
+
+- python3
+- pip
+- Docker
+- Docker Compose
+
 #### 1. Create and activate a virtual environment:
 
 ```
@@ -108,7 +115,7 @@ ES_PORT=9200
 #### 2. Start the services
 
 ```
-docker compose -f elastic-backend/docker-compose.yml --env-file .env up
+docker-compose -f elastic-backend/docker-compose.yml --env-file .env up
 ```
 
 #### 3. After the services are up, create an index called `cv-transcriptions` by running the `elastic-backend/create-index.sh` script

@@ -1,5 +1,5 @@
+import argparse
 import os
-import sys
 
 import numpy as np
 import pandas as pd
@@ -64,10 +64,20 @@ def index_records(records_path: str, index_name: str):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python elastic-backend/cv-index.py <records_path>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "records_path",
+        type=str,
+        help="Path to the CSV file containing records to be indexed",
+    )
+    parser.add_argument(
+        "--index-name",
+        type=str,
+        default=os.getenv("INDEX_NAME", "cv-transcriptions"),
+        help="The name of the existing index in the Elasticsearch cluster. Defaults to INDEX_NAME env variable or 'cv-transcriptions'.",
+    )
+    args = parser.parse_args()
     index_records(
-        records_path=sys.argv[1],
-        index_name=os.getenv("INDEX_NAME", "cv-transcriptions"),
+        records_path=args.records_path,
+        index_name=args.index_name,
     )
